@@ -271,5 +271,19 @@ sudo apt-get install cpuid
 
 ```
 •	NOTE: Make sure two terminals are open:
-o	the GCP VM terminal(T1)
-o	the nested VM terminal(logged in)(T2)
+o	GCP VM terminal(T1)
+o	nested VM terminal(logged in)(T2)
+
+For CPUID function %eax=0x4ffffffc
+
+In terminal 2 do sudo cpuid -l 0x4ffffffc
+
+In terminal 1 do 'sudo dmesg' to display kernel messages
+
+For %eax=0x4ffffffd
+
+In terminal 2 sudo cpuid -l 0x4ffffffd
+
+In Terminal run sudo dmesg
+
+ 
