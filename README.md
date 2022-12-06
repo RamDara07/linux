@@ -138,24 +138,20 @@ After creating VM, SSH into the VM
  ~  sudo apt-get install wget
  ```
 
-3.	
-```
-wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.0.7.tar.xz 
-```
 
-4.	`tar xvf linux-6.0.7.tar.xz`
+3.	`tar xvf linux-6.0.7.tar.xz`
 
-5.	Install all packages required for building the kernel.
+4.	Install all packages required for building the kernel.
 	```
 	~  sudo apt-get install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison
 	```
 	
-6.	Configure the kernel by copying an existing configuration file to a .config file.
+5.	Configure the kernel by copying an existing configuration file to a .config file.
 ```
 	~  cd linux-6.0.7
 	~  cp -v /boot/config-$(uname -r) .config
 ```
-7.	Build the kernel by using the following:
+6.	Build the kernel by using the following:
 ```
 	~  sudo make modules
 	~  sudo make
@@ -181,7 +177,7 @@ scripts/config --disable SYSTEM_REVOCATION_KEYS
 
 <br />
 
-8.	Bootloader is automatically updated because of the make `install` and now we can `reboot` the system and `check` the kernel version
+7.	Bootloader is automatically updated because of the make `install` and now we can `reboot` the system and `check` the kernel version
 
 
 ```
@@ -197,20 +193,20 @@ sudo reboot
 <br />
 
 
-9.	Make code changes in the Linux kernel code. Replace the files below with the files from this repository.
+8.	Make code changes in the Linux kernel code. Replace the files below with the files from this repository.
 -	`vmx.c: /linux-6.0.7/arch/x86/kvm/vmx/vmx.c`
 -	`cpuid.c: /linux-6.0.7/arch/x86/kvm/cpuid.c`
 
 <br />
 
-10.	Built and install modules again
+9.	Built and install modules again
 
 
 -	`sudo make modules && sudo make modules_install`
 
 <br />
 
-11.	To load the newly created modules, run the following commands:
+10.	To load the newly created modules, run the following commands:
 
 ```
 sudo rmmod kvm_intel
@@ -221,19 +217,19 @@ sudo modprobe kvm_intel
 
 <br />
 
-12.	To test the functionality, a nested virtual machine was created inside the GCP virtual machine. The steps to create a `nested virtual machine` are as follows:
+11.	To test the functionality, a nested virtual machine was created inside the GCP virtual machine. The steps to create a `nested virtual machine` are as follows:
 -	Download the Ubuntu cloud image.img (QEMU compatible image) file from this `[ubuntu cloud images site]` in GCP VM (https://cloud-images.ubuntu.com/).
 
 <br />
 
-13.	
+12.	
 ```
 	wget https://cloud-images.ubuntu.com/bionic/current/bionic-server-cloudimg-amd64.img
 ```
 
 <br />
 
-14.	`Install` the required qemu packages
+13.	`Install` the required qemu packages
 ```
 sudo apt update && sudo apt install qemu-kvm -y
 ```
@@ -245,46 +241,25 @@ Move to the directory where .img file is downloaded. This ubuntu cloud image doe
 
 So, to change the password and login into the vm, perform these following steps(terminal):
 
-1) 
-``` 
-sudo apt-get install cloud-image-utils
-```
+# Update qemu tools
+sudo apt update && sudo apt install qemu-kvm -y
+sudo apt install libguestfs-tools
 
-<br />
+# set root password
+sudo virt-customize -a bionic-server-cloudimg-amd64.img --root-password password:ram123
 
-2) 
-```
-	cat >user-data <<EOF
-   	#cloud-config
-   	password: newpass #new password here
-    	chpasswd: { expire: False }
-    	ssh_pwauth: True
-    	EOF
-```
-
-<br />
-
-3) 
-```
+# log into VM
+sudo qemu-system-x86_64 -enable-kvm -hda bionic-server-cloudimg-amd64.img -m 512 -curses -nographic
 cloud-localds user-data.img user-data
 
 ```
 
 <br />
 
--	Now, to run this ubuntu image, execute this:
-```
-sudo qemu-system-x86_64 -enable-kvm -hda bionic-server-cloudimg-amd64.img -drive "file=user-data.img,format=raw" -m 512 -curses -nographic
-```
-
-
-
-<br />
-
 -	**username**: `ubuntu`
 
 
--	**password**: `newpass`
+-	**password**: `ram123`
 
 <br />
 
