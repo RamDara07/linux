@@ -132,10 +132,11 @@ After creating VM, SSH into the VM
 ``` 
 ~ git pull https://github.com/RamDara07/linux
 
-
 ```
 
-2. sudo chmod -R 777 linux
+2. 
+```
+sudo chmod -R 777 linux
  ```
 
 3.	Install all packages required for building the kernel.
